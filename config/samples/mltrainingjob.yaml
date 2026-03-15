@@ -1,0 +1,27 @@
+apiVersion: mlops.harshadkhetpal.dev/v1alpha1
+kind: MLTrainingJob
+metadata:
+  name: fraud-detection-v2
+  namespace: mlops
+spec:
+  image: harshadkhetpal/fraud-model:latest
+  framework: pytorch
+  replicas: 4
+  gpuPerReplica: 1
+  dataset: s3://harshad-ml-data/fraud/2024
+  hyperparameters:
+    epochs: "50"
+    learning_rate: "0.001"
+    batch_size: "512"
+  tracking:
+    mlflow_uri: http://mlflow.mlops.svc.cluster.local:5000
+    experiment: fraud-detection-prod
+  resources:
+    requests:
+      cpu: "4"
+      memory: "8Gi"
+      nvidia.com/gpu: "1"
+    limits:
+      cpu: "8"
+      memory: "16Gi"
+      nvidia.com/gpu: "1"
